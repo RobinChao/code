@@ -18,7 +18,25 @@ def cyclic(head):
 		if node2 is None:
 			return False
 		if node1 == node2:
-			return node2, True
+			return get_start_loop_node(head, node2), True
+			
+def get_start_loop_node(head, loop_node):
+	n = 1;
+	node1 = loop_node
+	while node1.next != loop_node:
+		node1 = node1.next
+		n += 1
+	
+	node2 = head
+	for i in range(n):
+		node2 = node2.next
+	
+	node1 = head;	
+	while node1 != node2:
+		node1 = node1.next
+		node2 = node2.next
+	return node1;
+			
 			
 if __name__ == '__main__':
 	head = Node(1)
@@ -46,14 +64,18 @@ if __name__ == '__main__':
 	
 	node, cycle = cyclic(head)
 	print 'cyclic(head) = ', cycle
-	print 'node = ', node
+	print 'starting loop node = ', node
+	
 	now = head
-	while True:
+	while now != node:
 		print now, '-->',
-		if now == node:
-			break
 		now = now.next
-	print '|='
+	print '[', now, ']', '-->',
+	now = now.next
+	while now != node:
+		print now, '-->',
+		now = now.next
+	print '[', now, ']'
 	
 	x = Node(1)
 	x.next = x
