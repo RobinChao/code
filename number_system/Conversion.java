@@ -33,9 +33,9 @@ class Conversion {
 		
 		wholeNo = Integer.parseInt(number.substring(0, dot));
 		String w = convertWholeNumber(wholeNo, radix);
-		
+				
 		double fractionalPart = Double.parseDouble(number.substring(dot));
-		return sign + w + fractionalPart;
+		return sign + w + convertFractionalPart(fractionalPart, radix);
 	}
 	
 	static String convertWholeNumber(int wholeNo, int radix) {
@@ -52,7 +52,7 @@ class Conversion {
 	
 	static String convertFractionalPart(double fractionalPart, int radix) {
 		if (fractionalPart == 0)	return ".0";
-		
+
 		String s = ".";
 		for (int i = 0; i < SIG_DIGITS_AFTER_DOT; ++i) {
 			fractionalPart *= radix;
