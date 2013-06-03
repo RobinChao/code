@@ -1,6 +1,14 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
+
+/*	XY	= (Xl*2n/2 + Xr)(Yl*2n/2 + Yr)
+ *		= 2n XlYl + 2n/2(XlYr + XrYl) + XrYr
+ *		= 2n XlYl + 2n/2 * [(Xl + Xr)(Yl + Yr) - XlYl - XrYr] + XrYr
+ *
+ *	T(n) = 3T(n/2) + 
+ */
 
 int make_equal_length(string& a, string& b) {
 	int len_a = a.size();
@@ -20,7 +28,26 @@ int make_equal_length(string& a, string& b) {
 	}
 }
 
-long int multiply(string& a, string& b){
+string add(string a, string b) {
+	string result;
+	int len = make_equal_length(a, b);
+	int carry = 0;
+	
+	for (int i = len-1; i >= 0; --i) {
+		int first_bit  = a[i] - '0';
+		int second_bit = b[i] - '0';
+		
+		int sum = (first_bit ^ second_bit ^ carry) + '0';
+		result = (char) sum + result;
+		
+		carry = (first_bit & second_bit) | (first_bit & carry) | (second_bit & carry);
+	}
+	
+	if (carry)	result = '1' + result;	
+	return result;
+}
+
+long int multiply(string a, string b) {
 	int n = make_equal_length(a, b);
 	
 	if (n == 0)		return 0;
@@ -30,18 +57,27 @@ long int multiply(string& a, string& b){
 	int second_half	= n - first_half;	// ceil(n/2)
 	
 	string a_left	= a.substr(0, first_half);
-	string a_right	= a.substr(second_half, n);
+	string a_right	= a.substr(first_half, second_half);
 	
 	string b_left	= b.substr(0, first_half);
-	string b_right	= b.substr(second_half, n);
-	
+	string b_right	= b.substr(first_half, second_half);
 	long int p1 = multiply(a_left, b_left);
 	long int p2 = multiply(a_right, b_right);
-	long int p3 = multiply(add(a_left, a_right), add(b_left, b_right));
 	
+	string t1 = add(a_left, a_right);
+	string t2 = add(b_left, b_right);
+	long int p3 = multiply(t1, t2);
+	
+	return p1*(1 << (2*second_half)) + (p3 - p1- p2)*(1 << second_half) + p2;
 }
 
 int main() {
-	
+	cout << "multiply(\"111100\", \"1010\")	= " << multiply("111100", "1010") << endl;
+	cout << "multiply(\"11011\", \"10100\") = " << multiply("11011", "10100") << endl;
+	cout << "multiply(\"11\", \"1010\") = " << multiply("11", "1010") << endl;
+	cout << "multiply(\"1\", \"11101\") = " << multiply("1", "11101") << endl;
+	cout << "multiply(\"0\", \"11101\") = " << multiply("0", "11101") << endl;
+	cout << "multiply(\"111\", \"111\") = " << multiply("111", "111") << endl;
+	cout << "multiply(\"11\", \"11\") = " << multiply("11", "11") << endl;
 	return 0;
 }
