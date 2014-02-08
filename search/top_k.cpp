@@ -21,7 +21,7 @@ string* top_k(string* list, int n, int k) {
 		}
 	}
 
-	std::string* res = new std::string[k];
+	string* res = new string[k];
 	for (int i = 0; i < k; ++i) {
 		res[k - i - 1] = q.top();
 		q.pop();
