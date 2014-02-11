@@ -31,7 +31,7 @@ int quickselect_inner(int* arr, int lo, int hi, int k) {
 		return arr[lo];
 
 	int pivot_index = partition(arr, lo, hi, k);
-	if (pivot_index == k)
+	if (pivot_index == k-1)
 		return arr[pivot_index];
 	else if (pivot_index < k)
 		return quickselect_inner(arr, pivot_index + 1, hi, k);
@@ -40,14 +40,48 @@ int quickselect_inner(int* arr, int lo, int hi, int k) {
 }
 
 int quickselect(int* arr, int n, int k) {
-	return quickselect_inner(arr, 0, n-1, k-1); // since indexing starts at 0
+	if (k > n)
+		k = n;
+
+	return quickselect_inner(arr, 0, n-1, k); // since indexing starts at 0
 }
 
+int quickselect_inplace_inner(int* arr, int lo, int hi, int k) {
+	if (lo == hi)
+		return arr[lo];
+
+	int pivot_index = partition(arr, lo, hi, k);
+	while (pivot_index != k-1) {
+		if (pivot_index < k)
+			lo = pivot_index + 1;
+		else
+			hi = pivot_index - 1;
+
+		pivot_index = partition(arr, lo, hi, k);
+	}
+
+	return arr[pivot_index];
+}
+
+int quickselect_inplace(int* arr, int n, int k) {
+	if (k > n)
+		k = n;
+
+	return quickselect_inplace_inner(arr, 0, n-1, k); // since indexing starts at 0
+}
+
+
 int main(void) {
-	int arr[] = { 3, 4, 9, 7, 5, 2, 6, 1, 0, 8 };
-	printf("%d\n", quickselect(arr, 10, 1));
-	printf("%d\n", quickselect(arr, 10, 2));
-	printf("%d\n", quickselect(arr, 10, 3));
-	printf("%d\n", quickselect(arr, 10, 10));
+	int arr1[] = { 3, 4, 9, 7, 5, 2, 6, 1, 0, 8 };
+	int arr2[] = { 3, 4, 9, 7, 5, 2, 6, 1, 0, 8 };
+	printf("%d\n", quickselect(arr1, 10, 1));
+	printf("%d\n", quickselect(arr1, 10, 2));
+	printf("%d\n", quickselect(arr1, 10, 3));
+	printf("%d\n", quickselect(arr1, 10, 10));
+
+	printf("%d\n", quickselect_inplace(arr2, 10, 1));
+	printf("%d\n", quickselect_inplace(arr2, 10, 2));
+	printf("%d\n", quickselect_inplace(arr2, 10, 3));
+	printf("%d\n", quickselect_inplace(arr2, 10, 10));
 	return 0;
 }
