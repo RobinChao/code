@@ -53,7 +53,7 @@ int compare(const void* x, const void* y) {
 }
 
 int main(){
-	char s1[] = "abcde"; // do not use string literals like char* s = "123"
+	char s1[] = "abcde";
 	printf("\n\npermute('%s', 0) = \n", s1);
 	permute(s1, 0);
 
