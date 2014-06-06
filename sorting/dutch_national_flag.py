@@ -26,3 +26,4 @@ def dutch_national_flag(arr):
 arr = 'brrrrbbbbwbbbwrrrwwwwwbr'
 print arr
 print dutch_national_flag(arr)
+# expected output = rrrrrrrrwwwwwwwbbbbbbbbb''
